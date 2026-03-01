@@ -1,0 +1,5 @@
+// settings are managed by the root project; this file is no longer needed and
+// can safely be deleted. Keeping it around may confuse Gradle when the root
+// build includes the project.
+
+rootProject.name = 'expense-service'

@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+}
+
+allprojects {
+    group = 'com.company'
+    version = '1.0.0'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    // apply the java plugin so that all of the standard configurations exist
+    // (testImplementation, compileOnly, etc.). the convention plugins applied in
+    // each subproject also do this, but it’s harmless to apply it again, and it
+    // ensures we can safely add dependencies/configure the java extension here.
+    apply plugin: 'java'
+
+    // configure compatibility only once the plugin is present; when this block
+    // runs gradle hasn't yet evaluated the subproject’s own build.gradle, so
+    // the toolchain from buildlogic.common isn't available yet.
+    plugins.withType(org.gradle.api.plugins.JavaPlugin) {
+        java {
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
+        }
+    }
+
+    dependencies {
+        // some modules (e.g. utility libraries) may not have the java plugin at
+        // configuration time; guard the call so we don't hit the same error again
+        plugins.withType(org.gradle.api.plugins.JavaPlugin) {
+            testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+        }
+    }
+
+    tasks.withType(Test).configureEach {
+        useJUnitPlatform()
+    }
+}

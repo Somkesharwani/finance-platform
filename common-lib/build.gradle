@@ -1,0 +1,19 @@
+/*
+ * Common reusable code library for the finance‑platform monorepo.
+ *
+ * This module is treated as a normal java-library project; most of the
+ * configuration is pulled in from buildlogic.java-library-conventions in
+ * buildSrc so that all libraries share the same dependencies and toolchain.
+ */
+
+plugins {
+    id 'buildlogic.java-library-conventions'
+}
+
+// expose any shared utility dependencies here; nothing is required by default
+
+// example (uncomment when needed):
+// api 'org.apache.commons:commons-lang3'
+
+// you can also add project dependencies, e.g.:
+// api project(':utilities')
