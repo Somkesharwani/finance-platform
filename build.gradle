@@ -1,5 +1,8 @@
 plugins {
     id 'java'
+    // Spotless formatting plugin – applied to subprojects below so we can
+    // run `./gradlew spotlessApply` from the root.
+    id 'com.diffplug.spotless' version '6.25.0' apply false
 }
 
 allprojects {
@@ -17,6 +20,23 @@ subprojects {
     // each subproject also do this, but it’s harmless to apply it again, and it
     // ensures we can safely add dependencies/configure the java extension here.
     apply plugin: 'java'
+
+    // formatting rules - Spotless is useful for enforcing consistent style. by
+    // configuring it in the root we get a single `spotlessApply` task across all
+    // modules.
+    apply plugin: 'com.diffplug.spotless'
+    spotless {
+        java {
+            googleJavaFormat('1.17.0')
+            target 'src/**/*.java'
+        }
+        format 'misc', {
+            // include gradle scripts, shell scripts, etc.
+            target '*.gradle', '*.gradle.kts', '**/*.gradle', '**/*.gradle.kts', 'gradlew', 'gradlew.bat'
+            trimTrailingWhitespace()
+            endWithNewline()
+        }
+    }
 
     // configure compatibility only once the plugin is present; when this block
     // runs gradle hasn't yet evaluated the subproject’s own build.gradle, so
